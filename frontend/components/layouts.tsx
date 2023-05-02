@@ -1,18 +1,16 @@
 import Link from "next/link";
 import { useAuth } from "@/contexts/authContext";
-import { SessionProvider } from "next-auth/react";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { ReactNode } from "react";
 import { logout } from "@/utils/api";
 
-type DefaultLayoutProps = {
-  Component: React.ComponentType;
-  pageProps: Record<string, unknown>;
-  children?: ReactNode;
+type LayoutProps = {
+  children: ReactNode;
 };
 
-const DefaultLayout = ({ Component, pageProps }: DefaultLayoutProps) => {
-  const { userInfo, setUserInfo } = useAuth();
+export function DefaultLayout({ children }: LayoutProps) {
+  const { userInfo } = useAuth();
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-yellow-100 to-yellow-200 flex items-center justify-center">
       <div className="bg-violet-100 p-5 rounded-lg shadow-lg w-full max-w-3xl text-center">
@@ -36,13 +34,22 @@ const DefaultLayout = ({ Component, pageProps }: DefaultLayoutProps) => {
           </div>
         </div>
         <div className="bg-white min-h-screen justify-center p-5 my-2">
-          <SessionProvider session={pageProps.session}>
-            <Component {...pageProps} />
-          </SessionProvider>
+          {children}
         </div>
       </div>
     </div>
   );
-};
+}
 
-export default DefaultLayout;
+export function LoginLayout({ children }: LayoutProps) {
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-yellow-100 to-yellow-200 flex items-center justify-center">
+      <div className="bg-violet-100 p-5 rounded-lg shadow-lg w-full max-w-3xl">
+        <div className="flex justify-between"></div>
+        <div className="bg-white min-h-screen justify-center p-5 my-2">
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+}

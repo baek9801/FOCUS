@@ -14,3 +14,10 @@ export async function logout() {
       console.error("Error during log out:", error.message);
   }
 }
+
+export function shortenedTitle(title: string) {
+  const maxLength = 45;
+  return title.length > maxLength
+    ? title.substring(0, maxLength - 3) + "..."
+    : title;
+}
