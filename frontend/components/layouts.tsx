@@ -24,7 +24,7 @@ export function DefaultLayout({ children }: LayoutProps) {
             </Link>
           </div>
           <div className="flex rounded-lg p-1">
-            <Link href={"myPage"} className="yellow-button">
+            <Link href={"/myPage"} className="yellow-button">
               <AccountCircleIcon />
               {userInfo ? userInfo.display_name : ""}
             </Link>

@@ -5,12 +5,13 @@ import { useRouter } from "next/router";
 import { DefaultLayout } from "@/components/layouts";
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
-import { shortenedTitle } from "@/utils/api";
+import { shortenedString } from "@/utils/api";
 
 type Book = {
   id: number;
   title: string;
   formats: any;
+  subjects: string[];
 };
 
 type BookListProps = {
@@ -98,13 +99,16 @@ export default function BookList({ books }: BookListProps) {
                 alt={book.title}
                 width={90}
                 height={60}
-                layout="intrinsic"
                 className=" border border-gray-800"
               ></Image>
             </div>
-            <div className="text-xs m-2 p-2 rounded-md w-full bg-slate-400 text-left">
-              <div>{shortenedTitle(book.title)}</div>
-              <div className="m-1 p-1 bg-indigo-50 h-16">details</div>
+            <div className="m-2 p-2 rounded-md w-full bg-slate-400 text-left">
+              <div className="text-lg font-bold">
+                {shortenedString(book.title, 45)}
+              </div>
+              <div className="m-1 p-1 bg-indigo-50 h-16">
+                {shortenedString(book.subjects.join(" / "), 140)}
+              </div>
             </div>
           </Link>
         ))}

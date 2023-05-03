@@ -1,25 +1,78 @@
 import { useAuth } from "@/contexts/authContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Modal } from "@/components/modal";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import { DefaultLayout } from "@/components/layouts";
+import { saveUserData } from "@/utils/api";
 
 export default function MyPage() {
-  const { userInfo } = useAuth();
-  const genres = ["Rock", "Jazz", "Classic", "Soran"];
+  const { userInfo, setUserInfo } = useAuth();
+  const genres = [
+    "pop",
+    "k-pop",
+    "r-n-b",
+    "hip-hop",
+    "country",
+    "acoustic",
+    "blues",
+    "jazz",
+    "classical",
+    "rock",
+  ];
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [myGenre, setMyGenre] = useState([false, true, false, false]);
+  const [myGenre, setMyGenre] = useState(() => new Array(10).fill(false));
+  const [chosen, setChosen] = useState(0);
 
-  function toggleGenre(target: Number) {
+  useEffect(() => {
+    if (userInfo) {
+      setMyGenre(
+        genres.map((genre) => {
+          if (userInfo.genres?.includes(genre)) {
+            setChosen((prev) => prev + 1);
+            return true;
+          } else return false;
+        })
+      );
+      saveUserData(userInfo);
+    }
+  }, [userInfo]);
+
+  function toggleGenre(target: number) {
+    if (chosen >= 3 && !myGenre[target]) return;
     setMyGenre((prev) =>
       prev.map((genre, index) => {
         if (index === target) {
-          return !genre;
+          if (genre) {
+            setChosen((prev) => prev - 1);
+            return false;
+          } else {
+            setChosen((prev) => prev + 1);
+            return true;
+          }
         } else return genre;
       })
     );
   }
+
+  const genreMap = (genre: string, index: number, lineIdx: number) => (
+    <button
+      key={index}
+      onClick={() => toggleGenre(index + 5 * lineIdx)}
+      className="flex bg-orange-50 hover:bg-orange-300 rounded-md mx-1 px-1 py-1"
+    >
+      <div key={index} className=" rounded-md mx-1 px-1">
+        {genre}
+      </div>
+      <div>
+        {myGenre[index + 5 * lineIdx] ? (
+          <CheckCircleIcon style={{ fontSize: "0.8em" }} />
+        ) : (
+          <RadioButtonUncheckedIcon style={{ fontSize: "0.8em" }} />
+        )}
+      </div>
+    </button>
+  );
 
   return (
     <DefaultLayout>
@@ -31,6 +84,9 @@ export default function MyPage() {
         <div className="flex justify-between">
           <div className="flex">
             선호 장르:
+            <div className=" bg-orange-50 rounded-md mx-1">
+              {chosen === 0 && "최대 3개의 장르를 선택할 수 있습니다"}
+            </div>
             <div className="flex">
               {genres.map((genre, index) => {
                 return (
@@ -61,28 +117,23 @@ export default function MyPage() {
         <Modal
           onClose={() => {
             setIsModalOpen(false);
+            setUserInfo((prev: any) => {
+              prev.genres = genres.filter((genre, index) => myGenre[index]);
+              return prev;
+            });
           }}
         >
           <div className="text-3xl">
+            <div className="flex mb-4">
+              {genres
+                .slice(0, 5)
+                .map((genre, index) => genreMap(genre, index, 0))}
+            </div>
+
             <div className="flex">
-              {genres.map((genre, index) => (
-                <button
-                  key={index}
-                  onClick={() => toggleGenre(index)}
-                  className="flex bg-orange-50 hover:bg-orange-300 rounded-md mx-1 px-1"
-                >
-                  <div key={index} className=" rounded-md mx-1 px-1">
-                    {genre}
-                  </div>
-                  <div>
-                    {myGenre[index] ? (
-                      <CheckCircleIcon style={{ fontSize: "0.8em" }} />
-                    ) : (
-                      <RadioButtonUncheckedIcon style={{ fontSize: "0.8em" }} />
-                    )}
-                  </div>
-                </button>
-              ))}
+              {genres
+                .slice(5, 10)
+                .map((genre, index) => genreMap(genre, index, 1))}
             </div>
           </div>
         </Modal>

@@ -3,13 +3,14 @@ import axios from "axios";
 import Link from "next/link";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { DefaultLayout } from "@/components/layouts";
-import { shortenedTitle } from "@/utils/api";
+import { shortenedString } from "@/utils/api";
 import Select from "@/components/select";
 
 type Book = {
   id: number;
   title: string;
   formats: any;
+  subjects: string[];
 };
 
 export async function getServerSideProps({
@@ -54,13 +55,17 @@ export default function BookPage({
             />
           </div>
           <div className="w-full bg-orange-200 overflow-hidden">
-            <div className="ml-4 text-xl">{shortenedTitle(book.title)}</div>
-            <div className="h-full bg-yellow-100">책의 설명</div>
+            <div className="ml-4 text-xl">
+              {shortenedString(book.title, 45)}
+            </div>
+            <div className="h-full bg-yellow-100">
+              {shortenedString(book.subjects.join(" / "), 300)}
+            </div>
           </div>
         </div>
       </div>
 
-      <Select numChoices={5} />
+      <Select numChoices={8} />
     </DefaultLayout>
   );
 }

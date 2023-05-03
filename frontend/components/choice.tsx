@@ -61,7 +61,7 @@ export default function Choice({
           {getRecom && (
             <>
               <div className="text-xl">music list</div>
-              <SpotifyPlayer accessToken={userInfo?.accessToken} />
+              <SpotifyPlayer />
             </>
           )}
         </div>

@@ -16,7 +16,6 @@ type AppContentProps = {
 function AppContent({ Component, pageProps }: AppContentProps) {
   const router = useRouter();
   const { userInfo, setUserInfo } = useAuth();
-  const { isLoading, setIsLoading } = useAuth();
 
   useEffect(() => {
     async function fetchUserData() {
@@ -24,23 +23,20 @@ function AppContent({ Component, pageProps }: AppContentProps) {
         const response = await axios.get("/api/getUser");
         const userData = response.data.user;
         setUserInfo(userData);
-        //console.log("유저", userData);
       } catch (error) {
         console.error("Error fetching user data:", error);
-      } finally {
-        setIsLoading(false);
+        router.replace("/loginPage");
       }
     }
-    fetchUserData();
-  }, []);
-
+    if (userInfo === null) fetchUserData();
+  }, [userInfo]);
+  /*
   useEffect(() => {
-    if (!isLoading && !userInfo) {
+    if (userInfo === null) {
       router.replace("/loginPage");
     }
-    setIsLoading(true);
-  }, [userInfo, isLoading]);
-
+  }, [userInfo]);
+*/
   useEffect(() => {
     const { accessToken, refreshToken } = router.query;
     if (accessToken && refreshToken) {

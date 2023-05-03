@@ -4,8 +4,6 @@ import { useAuth } from "@/contexts/authContext";
 import { DefaultLayout } from "@/components/layouts";
 
 export default function HomePage() {
-  const { isLoading, userInfo } = useAuth();
-
   return (
     <DefaultLayout>
       <div className="text-right">
@@ -21,15 +19,8 @@ export default function HomePage() {
               Browse Books
             </span>
           </Link>
-          <Link href="/bookList/1" className="w-full">
-            <span className="bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 rounded-full text-center block w-full mb-6 cursor-pointer">
-              Enter Your Text
-            </span>
-          </Link>
-          <div>
-            <div>{userInfo?.display_name}</div>
-            <div>{isLoading ? "isLoading" : "notLoading"}</div>
-          </div>
+
+          <div></div>
           <Image
             src={"/musicCat.png"}
             alt={"cat"}

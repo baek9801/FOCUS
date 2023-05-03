@@ -4,6 +4,7 @@ const nextConfig = {
   images: {
     domains: ["www.gutenberg.org", "i.scdn.co"],
   },
+  reactStrictMode: false,
 };
 
 module.exports = nextConfig;

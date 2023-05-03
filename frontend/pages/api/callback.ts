@@ -54,7 +54,6 @@ export default async function callbackHandler(
     const serializedToken = await getUserInfo(access_token, refresh_token);
     res.setHeader("Set-Cookie", serializedToken ?? "");
 
-    //console.log(access_token);
     res.redirect(`/?accessToken=${access_token}&refreshToken=${refresh_token}`);
   } catch (error) {
     if (error instanceof Error)
