@@ -5,25 +5,25 @@
 ## 실행화면
 * **로그인 화면**<br>
 서비스의 로그인 페이지. 어느 페이지에서든 로그아웃을 하면 로그인 페이지로 리디렉트된다.<br>
-<img src="public/sreenshots/login.png" width="80%" height="80%" title="login" alt="login"></img>
+<img src="public/sreenshots/login.png" width="80%" height="80%" title="login" alt="login"></img><br><br>
 * **메인 페이지**<br>
 서비스의 메인 페이지. 어느 페이지에서든 Home 버튼을 클릭하면 메인 페이지로 리디렉트된다.<br>
-<img src="public/sreenshots/mainPage.png" width="80%" height="80%" title="login" alt="mainPage"></img>
+<img src="public/sreenshots/mainPage.png" width="80%" height="80%" title="login" alt="mainPage"></img><br><br>
 * **마이 페이지**<br>
 사용자 정보를 확인할 수 있는 페이지. 어느 페이지에서든 사용자 이름을 클릭하면 마이 페이지로 리디렉트된다.<br>
-<img src="public/sreenshots/myPage.png" width="80%" height="80%" title="login" alt="myPage"></img>
+<img src="public/sreenshots/myPage.png" width="80%" height="80%" title="login" alt="myPage"></img><br><br>
 * **장르 선택창**<br>
 마이 페이지에서 장르변경을 클릭할 경우 생기는 모달창. 최대 세 개의 선호 장르를 선택할 수 있다.<br>
-<img src="public/sreenshots/genres.png" width="80%" height="80%" title="login" alt="genres"></img>
+<img src="public/sreenshots/genres.png" width="80%" height="80%" title="login" alt="genres"></img><br><br>
 * **책 리스트**<br>
 음악을 추천받을 소설을 선택할 수 있는 페이지.<br>
-<img src="public/sreenshots/bookList.png" width="80%" height="80%" title="login" alt="bookList"></img>
+<img src="public/sreenshots/bookList.png" width="80%" height="80%" title="login" alt="bookList"></img><br><br>
 * **책 페이지**<br>
 음악을 추천받을 챕터를 선택할 수 있는 페이지.<br>
-<img src="public/sreenshots/bookPage.png" width="80%" height="80%" title="login" alt="bookPage"></img>
+<img src="public/sreenshots/bookPage.png" width="80%" height="80%" title="login" alt="bookPage"></img><br><br>
 * **음악 추천창**<br>
 추천받기 버튼을 클릭하면 사용자의 선호 장르의 곡들이 추천된다. 재생 버튼을 눌러 재생할 수 있다.<br>
-<img src="public/sreenshots/player.png" width="80%" height="80%" title="login" alt="player"></img>
+<img src="public/sreenshots/player.png" width="80%" height="80%" title="login" alt="player"></img><br><br>
 
 ## 주요 이슈
 **1. 사용자 정보 관리**<br>
