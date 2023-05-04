@@ -44,9 +44,7 @@ export default function SpotifyPlayer() {
     }
     async function getPlaylist() {
       try {
-        const seedGenres = userInfo.genres.length
-          ? userInfo.genres.join(",")
-          : "pop";
+        const seedGenres = userInfo.genres ? userInfo.genres.join(",") : "pop";
         const searchResponse = await axios.get(
           `https://api.spotify.com/v1/recommendations?market=US&seed_genres=${seedGenres}&limit=6`,
           {
@@ -69,7 +67,9 @@ export default function SpotifyPlayer() {
         }
       }
     }
-    if (!userInfo.accessToken) return;
+    if (!userInfo.accessToken) {
+      return;
+    }
     getPlaylist();
   }, [userInfo]);
 
