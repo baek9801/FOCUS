@@ -66,7 +66,7 @@ export default function BookList({ books }: BookListProps) {
               key={number}
               className={
                 "mx-0.5 px-2 py-1 rounded-md" +
-                (number === curPage % 10
+                (number % 10 === curPage % 10
                   ? " bg-yellow-100 font-bold border-4 border-white"
                   : "")
               }
@@ -81,6 +81,7 @@ export default function BookList({ books }: BookListProps) {
           </Link>
           <Link
             href={"/bookList/" + (Math.floor((curPage - 1) / 10) * 10 + 11)}
+            className="yellow-button"
           >
             <KeyboardDoubleArrowRightIcon />
           </Link>
