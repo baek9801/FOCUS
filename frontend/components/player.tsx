@@ -22,7 +22,15 @@ type Track = {
   uri: string;
 };
 
-export default function SpotifyPlayer() {
+export default function SpotifyPlayer({
+  bookId,
+  chapterNumber,
+  apiUri,
+}: {
+  bookId: number;
+  chapterNumber: number;
+  apiUri: String;
+}) {
   const [myPlayer, setMyPlayer] = useState<Spotify.Player | null>(null);
   const [playingIdx, setPlayingIdx] = useState(-1);
   const [trackList, setTrackList] = useState<Track[]>([]);
@@ -42,19 +50,43 @@ export default function SpotifyPlayer() {
         return "";
       }
     }
+
+    async function getFullTrack(name: String, artist: String) {
+      console.log("finding track id");
+      const searchResponse = await axios.get(
+        `https://api.spotify.com/v1/search?q=track:${name}%20artist:${artist}&type=track`,
+        {
+          headers: {
+            Authorization: `Bearer ${userInfo.accessToken}`,
+          },
+        }
+      );
+      return searchResponse.data.tracks.items[0];
+    }
+
     async function getPlaylist() {
       try {
-        const seedGenres = userInfo.genres ? userInfo.genres.join(",") : "pop";
+        const gptTracksFromBack = await axios.get(
+          `${apiUri}/books/${bookId}/chapters/${chapterNumber}/recommendations`
+        );
+        const gptTracksPromises = await gptTracksFromBack.data.tracks.map(
+          (track: any) => getFullTrack(track.name, track.artist)
+        );
+
+        const gptTracks = await Promise.all(gptTracksPromises);
+
+        const seedTracks = gptTracks.map((track) => track.id).join(",");
+
         const searchResponse = await axios.get(
-          `https://api.spotify.com/v1/recommendations?market=US&seed_genres=${seedGenres}&limit=6`,
+          `https://api.spotify.com/v1/recommendations?market=US&seed_tracks=${seedTracks}&limit=5`,
           {
             headers: {
               Authorization: `Bearer ${userInfo.accessToken}`,
             },
           }
         );
-        const tracks = searchResponse.data.tracks;
-        setTrackList(tracks);
+        const spotifyTracks = searchResponse.data.tracks;
+        setTrackList(gptTracks.concat(spotifyTracks));
       } catch (error) {
         if (error instanceof AxiosError && error?.response?.status === 401) {
           const newAccessToken = await fetchAccessToken();
@@ -144,6 +176,7 @@ export default function SpotifyPlayer() {
 
   async function handlePlayClick(trackUri: string, index: number) {
     if (!myPlayer) return;
+    console.log(trackUri);
     myPlayer._options.getOAuthToken((token) => {
       fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
         method: "PUT",

@@ -1,12 +1,14 @@
 import React, { useState, useRef } from "react";
 import SpotifyPlayer from "@/components/player";
-import { useAuth } from "@/contexts/authContext";
 
 type ChocieProps = {
   choice: string;
   index: number;
   selected: number;
   onClick: (index: number) => void;
+  bookId: number;
+  chapterNumber: number;
+  apiUri: String;
 };
 
 export default function Choice({
@@ -14,8 +16,10 @@ export default function Choice({
   index,
   selected,
   onClick,
+  bookId,
+  chapterNumber,
+  apiUri,
 }: ChocieProps) {
-  const { userInfo } = useAuth();
   const contentRef = useRef(null);
   const [getRecom, setGetRecom] = useState(false);
   const handleClick = () => {
@@ -61,7 +65,11 @@ export default function Choice({
           {getRecom && (
             <>
               <div className="text-xl">music list</div>
-              <SpotifyPlayer />
+              <SpotifyPlayer
+                bookId={bookId}
+                chapterNumber={chapterNumber}
+                apiUri={apiUri}
+              />
             </>
           )}
         </div>

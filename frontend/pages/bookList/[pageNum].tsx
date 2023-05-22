@@ -8,10 +8,10 @@ import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArro
 import { shortenedString } from "@/utils/api";
 
 type Book = {
-  id: number;
+  bookId: number;
   title: string;
-  formats: any;
-  subjects: string[];
+  author: string;
+  description: string;
 };
 
 type BookListProps = {
@@ -24,8 +24,8 @@ export async function getServerSideProps({
   params: { pageNum?: string };
 }) {
   const pageNum = params.pageNum ?? "1";
-  const res = await axios.get("https://gutendex.com/books/?page=" + pageNum);
-  const books = res.data.results;
+  const res = await axios.get(`${process.env.API_URI}/books?page=${pageNum}`);
+  const books = res.data.books;
   return {
     props: {
       books,
@@ -42,7 +42,6 @@ export default function BookList({ books }: BookListProps) {
   const prevPage = curPage - 1 >= minPage ? curPage - 1 : minPage;
   const maxPage = 100;
   const nextPage = curPage + 1 <= maxPage ? curPage + 1 : maxPage;
-
   return (
     <DefaultLayout>
       <div className="flex justify-between">
@@ -90,13 +89,13 @@ export default function BookList({ books }: BookListProps) {
       <div>
         {books.map((book) => (
           <Link
-            href={`/books/${curPage}/${book.id}`}
-            key={book.id}
+            href={`/books/${curPage}/${book.bookId}`}
+            key={book.bookId}
             className="flex bg-slate-200 my-3 h-32 rounded-xl overflow-hidden"
           >
             <div className="m-2">
               <Image
-                src={book.formats["image/jpeg"]}
+                src={"/1984.jpg"}
                 alt={book.title}
                 width={90}
                 height={60}
@@ -108,7 +107,7 @@ export default function BookList({ books }: BookListProps) {
                 {shortenedString(book.title, 45)}
               </div>
               <div className="m-1 p-1 bg-indigo-50 h-16">
-                {shortenedString(book.subjects.join(" / "), 140)}
+                {shortenedString(book.description, 140)}
               </div>
             </div>
           </Link>

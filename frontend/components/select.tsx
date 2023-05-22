@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 import Choice from "@/components/choice";
 
-export default function Select({ numChoices }: { numChoices: number }) {
+export default function Select({
+  numChoices,
+  bookId,
+  apiUri,
+}: {
+  numChoices: number;
+  bookId: number;
+  apiUri: String;
+}) {
   const [selected, setSelected] = useState(-1);
 
   const choices = Array.from(
@@ -28,6 +36,9 @@ export default function Select({ numChoices }: { numChoices: number }) {
             index={index}
             selected={selected}
             onClick={onChoiceClick}
+            bookId={bookId}
+            chapterNumber={index + 1}
+            apiUri={apiUri}
           />
         ))}
       </div>

@@ -14,6 +14,12 @@ async function getUserInfo(accessToken: string, refreshToken: string) {
     data.accessToken = accessToken;
     data.refreshToken = refreshToken;
 
+    const responseFromBack = await axios.post(`${process.env.API_URI}/login`, {
+      name: data.display_name,
+      email: data.email,
+    });
+    console.log("res2: ", responseFromBack);
+
     const serializedToken = serialize("authToken", JSON.stringify(data), {
       httpOnly: true,
       secure: process.env.NODE_ENV !== "development",

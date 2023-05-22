@@ -30,13 +30,7 @@ function AppContent({ Component, pageProps }: AppContentProps) {
     }
     if (userInfo === null) fetchUserData();
   }, [userInfo]);
-  /*
-  useEffect(() => {
-    if (userInfo === null) {
-      router.replace("/loginPage");
-    }
-  }, [userInfo]);
-*/
+
   useEffect(() => {
     const { accessToken, refreshToken } = router.query;
     if (accessToken && refreshToken) {

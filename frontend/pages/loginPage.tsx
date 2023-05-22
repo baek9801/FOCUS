@@ -13,6 +13,7 @@ export default function LoginPage() {
       router.replace("/");
     }
   }, [userInfo, router]);
+
   return (
     <LoginLayout>
       <div className="text-right">

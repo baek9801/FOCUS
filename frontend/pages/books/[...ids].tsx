@@ -7,10 +7,10 @@ import { shortenedString } from "@/utils/api";
 import Select from "@/components/select";
 
 type Book = {
-  id: number;
   title: string;
-  formats: any;
-  subjects: string[];
+  author: string;
+  description: string;
+  chapterNumber: number;
 };
 
 export async function getServerSideProps({
@@ -19,12 +19,15 @@ export async function getServerSideProps({
   params: { ids: Array<number> };
 }) {
   const [pageNum, id] = params.ids;
-  const res = await axios.get(`https://gutendex.com/books/${id}`);
+  const res = await axios.get(`${process.env.API_URI}/books/${id}`);
   const book = res.data;
+  const apiUri = process.env.API_URI;
   return {
     props: {
       book,
       pageNum,
+      id,
+      apiUri,
     },
   };
 }
@@ -32,9 +35,13 @@ export async function getServerSideProps({
 export default function BookPage({
   book,
   pageNum,
+  id,
+  apiUri,
 }: {
   book: Book;
   pageNum: number;
+  id: number;
+  apiUri: String;
 }) {
   return (
     <DefaultLayout>
@@ -47,7 +54,7 @@ export default function BookPage({
         <div className="flex">
           <div className="h-full mr-2">
             <Image
-              src={book.formats["image/jpeg"]}
+              src={"/1984.jpg"}
               alt={book.title}
               width={190}
               height={300}
@@ -59,13 +66,13 @@ export default function BookPage({
               {shortenedString(book.title, 45)}
             </div>
             <div className="h-full bg-yellow-100">
-              {shortenedString(book.subjects.join(" / "), 300)}
+              {shortenedString(book.description, 300)}
             </div>
           </div>
         </div>
       </div>
 
-      <Select numChoices={8} />
+      <Select numChoices={8} bookId={id} apiUri={apiUri} />
     </DefaultLayout>
   );
 }

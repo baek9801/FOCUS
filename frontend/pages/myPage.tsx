@@ -4,9 +4,27 @@ import { Modal } from "@/components/modal";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import { DefaultLayout } from "@/components/layouts";
-import { saveUserData } from "@/utils/api";
+import axios from "axios";
 
-export default function MyPage() {
+export async function getServerSideProps() {
+  const res = await axios.get(`${process.env.API_URI}/profile/music-genres`);
+  const genresFromBack = res.data.genres;
+  const apiUri = process.env.API_URI;
+  return {
+    props: {
+      genresFromBack,
+      apiUri,
+    },
+  };
+}
+
+export default function MyPage({
+  genresFromBack,
+  apiUri,
+}: {
+  genresFromBack: String;
+  apiUri: String;
+}) {
   const { userInfo, setUserInfo } = useAuth();
   const genres = [
     "pop",
@@ -25,18 +43,15 @@ export default function MyPage() {
   const [chosen, setChosen] = useState(0);
 
   useEffect(() => {
-    if (userInfo) {
-      setMyGenre(
-        genres.map((genre) => {
-          if (userInfo.genres?.includes(genre)) {
-            setChosen((prev) => prev + 1);
-            return true;
-          } else return false;
-        })
-      );
-      saveUserData(userInfo);
-    }
-  }, [userInfo]);
+    setMyGenre(
+      genres.map((genre) => {
+        if (genresFromBack?.includes(genre)) {
+          setChosen((prev) => prev + 1);
+          return true;
+        } else return false;
+      })
+    );
+  }, []);
 
   function toggleGenre(target: number) {
     if (chosen >= 3 && !myGenre[target]) return;
@@ -74,11 +89,22 @@ export default function MyPage() {
     </button>
   );
 
+  const onClose = async () => {
+    setIsModalOpen(false);
+    setUserInfo((prev: any) => {
+      prev.genres = genres.filter((genre, index) => myGenre[index]);
+      return prev;
+    });
+    const res = await axios.post(`${apiUri}/profile/music-genres`, {
+      genres: genres.filter((genre, index) => myGenre[index]),
+    });
+  };
+
   return (
     <DefaultLayout>
       <div className="px-3 pb-3 text-left text-5xl">My Page</div>
       <div className=" bg-orange-100 p-10 m-3 text-left">
-        프로필
+        프로필{chosen}
         <div>이름: {userInfo?.display_name}</div>
         <div>이메일: {userInfo?.email}</div>
         <div className="flex justify-between">
@@ -114,15 +140,7 @@ export default function MyPage() {
         </div>
       </div>
       {isModalOpen && (
-        <Modal
-          onClose={() => {
-            setIsModalOpen(false);
-            setUserInfo((prev: any) => {
-              prev.genres = genres.filter((genre, index) => myGenre[index]);
-              return prev;
-            });
-          }}
-        >
+        <Modal onClose={onClose}>
           <div className="text-3xl">
             <div className="flex mb-4">
               {genres
